@@ -10,10 +10,10 @@ load_dotenv()  # 🔐 Charge les variables d'environnement du .env
 
 app = FastAPI()
 
-# 🗝️ Récupère la clé API OpenAI sécurisée
+# 🗝️ Clé API sécurisée depuis .env
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# 💬 Prompt système de Fropina
+# 🧴 Prompt de Fropina
 FROPINA_PROMPT = """
 Tu es Fropina, une experte en soins capillaires naturels pour cheveux afro, bouclés, crêpus et frisés.
 Tu donnes des conseils simples, naturels, jamais de produits industriels.
@@ -27,7 +27,7 @@ async def whatsapp_webhook(
 ):
     try:
         response = client.chat.completions.create(
-            model="gpt-4",  # 🔁 Tu peux mettre "gpt-3.5-turbo" si t'as pas accès à gpt-4
+            model="gpt-3.5-turbo",  # ✅ Modèle accessible et économique
             messages=[
                 {"role": "system", "content": FROPINA_PROMPT},
                 {"role": "user", "content": Body}
@@ -41,6 +41,6 @@ async def whatsapp_webhook(
     twilio_response.message(gpt_reply)
     return str(twilio_response)
 
-# 🚀 Pour tester en local
+# 🚀 Test local
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
