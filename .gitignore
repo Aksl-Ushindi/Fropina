@@ -1,0 +1,25 @@
+# 🛡️ Sécurité : évite d’envoyer les clés API
+.env
+
+# 🧹 Fichiers Python inutiles
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 📦 Dépendances / environnement
+*.env
+.venv/
+env/
+ENV/
+venv/
+pip-log.txt
+
+# 🐘 Pour VSCode ou autres IDE
+.vscode/
+.idea/
+
+# 🔧 Autres fichiers temporaires
+*.log
+*.sqlite3
+*.db
+.DS_Store
