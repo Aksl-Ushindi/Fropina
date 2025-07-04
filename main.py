@@ -2,17 +2,20 @@ from fastapi import FastAPI, Form
 from fastapi.responses import PlainTextResponse
 from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
-import os
 from openai import OpenAI
+import uvicorn
+import os
 
-load_dotenv()  # 👈 Charge le fichier .env
+load_dotenv()  # 🔐 Charge les variables d'environnement du .env
 
 app = FastAPI()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ Nouvelle version API
+# 🗝️ Récupère la clé API OpenAI sécurisée
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# 💬 Prompt système de Fropina
 FROPINA_PROMPT = """
-Tu es Fropina, une experte en soins capillaires naturels pour cheveux afro, bouclés, crêpus et frisés. 
+Tu es Fropina, une experte en soins capillaires naturels pour cheveux afro, bouclés, crêpus et frisés.
 Tu donnes des conseils simples, naturels, jamais de produits industriels.
 Tu parles comme une grande sœur bienveillante, en langage texto.
 """
@@ -24,7 +27,7 @@ async def whatsapp_webhook(
 ):
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4",  # 🔁 Tu peux mettre "gpt-3.5-turbo" si t'as pas accès à gpt-4
             messages=[
                 {"role": "system", "content": FROPINA_PROMPT},
                 {"role": "user", "content": Body}
@@ -38,7 +41,6 @@ async def whatsapp_webhook(
     twilio_response.message(gpt_reply)
     return str(twilio_response)
 
-# 🧪 Test local (facultatif)
+# 🚀 Pour tester en local
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
